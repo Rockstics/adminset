@@ -55,16 +55,16 @@ then
 yum1=yes
 fi
 case $yum1 in
-	yes|y|Y|YES)
-	    yum install -y epel-release
-		yum install -y gcc expect python-pip python-devel ansible smartmontools dmidecode libselinux-python git rsync dos2unix openldap-devel
-		;;
-	no|n|N|NO)
+        yes|y|Y|YES)
+            yum install -y epel-release
+                yum install -y gcc expect python-pip python-devel ansible smartmontools dmidecode libselinux-python git rsync dos2unix openldap-devel
+                ;;
+        no|n|N|NO)
         yum install -y gcc python-pip expect python-devel ansible smartmontools dmidecode libselinux-python git rsync dos2unix openldap-devel
-		;;
-	*)
-		exit 1
-		;;
+                ;;
+        *)
+                exit 1
+                ;;
 esac
 
 # 分发代码
@@ -93,36 +93,36 @@ then
 db1=yes
 fi
 case $db1 in
-	yes|y|Y|YES)  
-		echo "installing a new mariadb...."
-		yum install -y mariadb-server mariadb-devel
-		service mariadb start
-		chkconfig mariadb on
-		mysql -e "CREATE DATABASE if not exists adminset DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
-		;;
-	no|n|N|NO)
-		read -p "your database ip address:" db_ip
-		read -p "your database port:" db_port
-		read -p "your database user:" db_user
-		read -p "your database password:" db_password
-		[ ! $db_password ] && echo "your db_password is empty confirm please press Enter key"
-		[ -f /usr/bin/mysql ]
-		sleep 3
-		if [ $? -eq 0 ]
-		then
-			mysql -h$db_ip -P$db_port -u$db_user -p$db_password -e "CREATE DATABASE if not exists adminset DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
-		else
-			yum install -y mysql
-			mysql -h$db_ip -P$db_port -u$db_user -p$db_password -e "CREATE DATABASE if not exists adminset DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
-		fi
-		sed -i "s/host = 127.0.0.1/host = $db_ip/g" $adminset_dir/adminset.conf
-		sed -i "s/user = root/user = $db_user/g" $adminset_dir/adminset.conf
-		sed -i "s/port = 3306/port = $db_port/g" $adminset_dir/adminset.conf
-		sed -i "s/password =/password = $db_password/g" $adminset_dir/adminset.conf
-		;;
-	*) 
-		exit 1                    
-		;;
+        yes|y|Y|YES)
+                echo "installing a new mariadb...."
+                yum install -y mariadb-server mariadb-devel
+                service mariadb start
+                chkconfig mariadb on
+                mysql -e "CREATE DATABASE if not exists adminset DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+                ;;
+        no|n|N|NO)
+                read -p "your database ip address:" db_ip
+                read -p "your database port:" db_port
+                read -p "your database user:" db_user
+                read -p "your database password:" db_password
+                [ ! $db_password ] && echo "your db_password is empty confirm please press Enter key"
+                [ -f /usr/bin/mysql ]
+                sleep 3
+                if [ $? -eq 0 ]
+                then
+                        mysql -h$db_ip -P$db_port -u$db_user -p$db_password -e "CREATE DATABASE if not exists adminset DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+                else
+                        yum install -y mysql
+                        mysql -h$db_ip -P$db_port -u$db_user -p$db_password -e "CREATE DATABASE if not exists adminset DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;"
+                fi
+                sed -i "s/host = 127.0.0.1/host = $db_ip/g" $adminset_dir/adminset.conf
+                sed -i "s/user = root/user = $db_user/g" $adminset_dir/adminset.conf
+                sed -i "s/port = 3306/port = $db_port/g" $adminset_dir/adminset.conf
+                sed -i "s/password =/password = $db_password/g" $adminset_dir/adminset.conf
+                ;;
+        *)
+                exit 1
+                ;;
 esac
 
 # 安装mongodb
@@ -133,29 +133,29 @@ then
 mongo=yes
 fi
 case $mongo in
-	yes|y|Y|YES)
-		echo "installing a new Mongodb...."
-		yum install -y mongodb mongodb-server
-		/bin/systemctl start mongod 
-		/bin/systemctl enable mongod 
-		;;
-	no|n|N|NO)
-		read -p "your Mongodb ip address:" mongodb_ip
-		read -p "your Mongodb port:" mongodb_port
-		read -p "your Mongodb user:" mongodb_user
-		read -p "your Mongodb password:" mongodb_pwd
-		read -p "your Mongodb collection:" mongodb_collection
-		[ ! $mongo_password ] && echo "your db_password is empty confirm please press Enter key"
-		sleep 3
-		sed -i "s/mongodb_ip = 127.0.0.1/host = $mongo_ip/g" $adminset_dir/adminset.conf
-		sed -i "s/mongodb_user =/mongodb_user = $mongodb_user/g" $adminset_dir/adminset.conf
-		sed -i "s/mongodb_port = 27017/port = $mongodb_port/g" $adminset_dir/adminset.conf
-		sed -i "s/mongodb_pwd =/mongodb_pwd = $mongodb_pwd/g" $adminset_dir/adminset.conf
-		sed -i "s/collection = sys_info/collection = $mongodb_collection/g" $adminset_dir/adminset.conf
-		;;
-	*)
-		exit 1
-		;;
+        yes|y|Y|YES)
+                echo "installing a new Mongodb...."
+                yum install -y mongodb mongodb-server
+                /bin/systemctl start mongod
+                /bin/systemctl enable mongod
+                ;;
+        no|n|N|NO)
+                read -p "your Mongodb ip address:" mongodb_ip
+                read -p "your Mongodb port:" mongodb_port
+                read -p "your Mongodb user:" mongodb_user
+                read -p "your Mongodb password:" mongodb_pwd
+                read -p "your Mongodb collection:" mongodb_collection
+                [ ! $mongodb_pwd ] && echo "your db_password is empty confirm please press Enter key"
+                sleep 3
+                sed -i "s/mongodb_ip = 127.0.0.1/mongodb_ip = $mongodb_ip/g" $adminset_dir/adminset.conf
+                sed -i "s/mongodb_user =/mongodb_user = $mongodb_user/g" $adminset_dir/adminset.conf
+                sed -i "s/mongodb_port = 27017/mongodb_port = $mongodb_port/g" $adminset_dir/adminset.conf
+                sed -i "s/mongodb_pwd =/mongodb_pwd = $mongodb_pwd/g" $adminset_dir/adminset.conf
+                sed -i "s/collection = sys_info/collection = $mongodb_collection/g" $adminset_dir/adminset.conf
+                ;;
+        *)
+                exit 1
+                ;;
 esac
 
 # 安装主程序
@@ -179,7 +179,7 @@ python setup.py build
 python setup.py install
 
 cd $adminset_dir
-pip install -r requirements.txt
+pip install -r requirements.txt --use-feature=2020-resolver
 python manage.py makemigrations
 python manage.py migrate
 echo "please create your adminset' super admin:"
